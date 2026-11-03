@@ -1,0 +1,8 @@
+# Fail2ban del servidor (UD6). Después de cambiar algo: ./lab.sh fail2ban
+[DEFAULT]
+# Cómo banea: con nftables (en este servidor no hay iptables)
+banaction = nftables-multiport
+
+# ✍️ 3. Activa la cárcel de SSH: 3 fallos en 10 minutos = 1 hora fuera. Lee el registro /var/log/auth.log
+[sshd]
+enabled = false

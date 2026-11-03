@@ -1,0 +1,75 @@
+# Laboratorio de clase · SAD UD5 (IDS/IPS y WAF) y UD6 (bastionado). Se maneja con ./lab.sh (./lab.sh ayuda).
+#
+#   «Internet» 203.0.113.0/24                 DMZ 10.10.20.0/24
+#   internet .50 (el atacante)                tienda .10 · waf .20 (ModSecurity) · servidor .30
+#                 \______ firewall .254 (wan · dmz) con Suricata vigilando la wan ______/
+#
+# Lo que editas está en tu carpeta: firewall/suricata/, waf/ y servidor/.
+name: sad-ud56
+
+x-maquina: &maquina
+  build: .
+  image: sad-ud56
+  cap_add: [NET_ADMIN, NET_RAW]
+  tty: true
+  stdin_open: true
+
+services:
+  firewall:
+    <<: *maquina
+    container_name: sad-ud56-firewall
+    hostname: firewall
+    environment: { ROL: firewall }
+    sysctls:
+      net.ipv4.ip_forward: 1
+    volumes:
+      - ./firewall:/lab        # carpeta entera (no ficheros sueltos: los editores los sustituyen y Docker no lo ve)
+    networks:
+      internet: { ipv4_address: 203.0.113.254 }
+      dmz: { ipv4_address: 10.10.20.254 }
+
+  internet:
+    <<: *maquina
+    container_name: sad-ud56-internet
+    hostname: internet
+    environment: { ROL: internet }
+    networks: { internet: { ipv4_address: 203.0.113.50 } }
+    depends_on: [firewall]
+
+  tienda:
+    <<: *maquina
+    container_name: sad-ud56-tienda
+    hostname: tienda
+    environment: { ROL: tienda }
+    networks: { dmz: { ipv4_address: 10.10.20.10 } }
+    depends_on: [firewall]
+
+  # El WAF: la imagen oficial de OWASP (Nginx + ModSecurity + Core Rule Set) delante de la tienda.
+  # Su modo está en waf/waf.env y las excepciones en waf/plugins/ (./lab.sh waf para aplicar los cambios)
+  waf:
+    image: owasp/modsecurity-crs:nginx@sha256:7698c48a41a43138ae317feeec964d1515b861cc1d9e50617bc1cdfe9f314e1d
+    container_name: sad-ud56-waf
+    hostname: waf
+    env_file: ./waf/waf.env
+    environment:
+      BACKEND: http://10.10.20.10:80
+      BLOCKING_PARANOIA: 1
+      ANOMALY_INBOUND: 5
+    volumes:
+      - ./waf/plugins:/opt/owasp-crs/plugins:ro
+    networks: { dmz: { ipv4_address: 10.10.20.20 } }
+    depends_on: [tienda]
+
+  servidor:
+    <<: *maquina
+    container_name: sad-ud56-servidor
+    hostname: servidor
+    environment: { ROL: servidor }
+    volumes:
+      - ./servidor:/lab
+    networks: { dmz: { ipv4_address: 10.10.20.30 } }
+    depends_on: [firewall]
+
+networks:
+  internet: { ipam: { config: [{ subnet: 203.0.113.0/24, gateway: 203.0.113.1 }] } }
+  dmz: { internal: true, ipam: { config: [{ subnet: 10.10.20.0/24, gateway: 10.10.20.1 }] } }

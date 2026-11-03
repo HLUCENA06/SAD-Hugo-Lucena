@@ -1,0 +1,16 @@
+# Reglas de Suricata del laboratorio (UD5). Después de cambiar algo: ./lab.sh reglas
+#
+#   acción  protocolo  origen puerto -> destino puerto  (opciones; sid:número único; rev:versión;)
+#
+# $HOME_NET = nuestras redes (la DMZ) · $EXTERNAL_NET = todo lo demás (Internet)
+
+# 👀 Ejemplo resuelto: avisa de cada ping que llega desde Internet a la DMZ
+alert icmp $EXTERNAL_NET any -> $HOME_NET any (msg:"LAB ping desde Internet"; itype:8; sid:1000001; rev:1;)
+
+# ✍️ 1. Escaneo de puertos: avisa cuando una misma IP de fuera manda MÁS DE 20 intentos de conexión (flags:S)
+#       a la DMZ en 10 segundos. Pista: threshold: type threshold, track by_src, count 20, seconds 10;  (sid:1000002)
+
+
+# ✍️ 2. Inyección SQL: avisa si en la URL de una petición web aparece «union» (da igual mayúsculas o minúsculas).
+#       Pista: alert http …  http.uri; content:"union"; nocase;  (sid:1000003)
+
