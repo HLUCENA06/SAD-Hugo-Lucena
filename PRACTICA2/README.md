@@ -1,4 +1,4 @@
-# Bodegas Atlántico · Práctica 2 de SAD (cortafuegos + VPN)
+# Bodegas Atlántico · Práctica 2 de SAD (cortafuegos, VPN, IDS/WAF y bastionado)
 
 Todo funciona con **Docker** y con **un solo mando**: `./lab.sh`. No hace falta saber Docker.
 
@@ -13,7 +13,10 @@ Todo funciona con **Docker** y con **un solo mando**: `./lab.sh`. No hace falta 
 |---|---|
 | `fw/nftables.conf` | La lista del vigilante (bloque A y reglas del bloque B). **Aquí trabajas.** |
 | `fw/wireguard/`, `enologa/wireguard/`, `comercial/wireguard/` | Las claves y los `wg0.conf` de la VPN (bloque B) |
-| `respuestas.md` | Tus respuestas (nmap, contador, tcpdump y dos preguntas) |
+| `fw/suricata/local.rules` | Las reglas de Suricata (bloque C) |
+| `waf/` | El WAF: su modo (`waf.env`) y las excepciones (`plugins/`) (bloque C) |
+| `reservas/` | El servidor de reservas: SSH, Fail2ban y Nginx (bloque D) |
+| `respuestas.md` | Tus respuestas (nmap, contador, tcpdump y las preguntas de cada bloque) |
 
 **Descomprime el kit dentro de tu repositorio** (queda la carpeta `kit-sad-p2/`): se entrega con `git push`.
 El enunciado completo está en Moodle. Si algo se lía: `./lab.sh reiniciar` (tus ficheros no se borran).

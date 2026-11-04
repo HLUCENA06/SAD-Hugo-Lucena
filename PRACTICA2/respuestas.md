@@ -4,25 +4,11 @@
 
 ## Bloque A · Piensa como un atacante (nmap)
 
-**Antes** de lanzar nada, predice qué verá alguien de la calle en la IP de la bodega (open / closed / filtered):
-
-| Puerto | Mi predicción | Por qué |
-|---|---|---|
-| 22 |  |  |
-| 80 |  |  |
-| 443 |  |  |
-| 5432 |  |  |
-| 8080 |  |  |
-
-**Ahora sí:** `./lab.sh cliente` y dentro `nmap -Pn -p 22,80,443,5432,8080 198.51.100.254`. Pega la salida:
+Desde la calle: `./lab.sh cliente` y dentro `nmap -Pn -p 22,80,443,5432,8080 198.51.100.254`. Pega la salida:
 
 ```text
 (pega aquí la salida de nmap)
 ```
-
-¿Has acertado todos? Si no, ¿en cuál fallaste y por qué?
-
->
 
 ## Bloque A · El contador
 
@@ -43,13 +29,19 @@ En dos líneas: ¿qué se ve por la calle y qué NO se ve?
 
 >
 
-## Bloque B · Dos preguntas
+## Bloque C · Para la defensa (C4)
 
-1. En el `wg0.conf` del firewall, ¿por qué el `AllowedIPs` del comercial es `10.66.0.3/32` y no `10.66.0.0/24`?
+Del **mismo ataque** (la inyección a la web): ¿qué ve el vigilante de la red (el IDS) y qué ve el portero de la web? ¿Por
+qué hacen falta los dos?
 
 >
 
-2. La enóloga cambia en su `wg0.conf` su dirección a `10.66.0.3` (la del comercial). ¿Consigue entrar al SSH de la
-   tienda? ¿Por qué?
+## Bloque D · La nota del servidor (D0 y D4)
+
+Nota del análisis **antes** de bastionar (D0):
+
+>
+
+Nota **después** (D4). ¿Por qué no llega a 100? ¿Significa que el servidor sigue inseguro? Comenta un aviso que siga saliendo.
 
 >
