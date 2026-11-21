@@ -5,4 +5,9 @@ banaction = nftables-multiport
 
 # ✍️ 3. Activa la cárcel de SSH: 3 fallos en 10 minutos = 1 hora fuera. Lee el registro /var/log/auth.log
 [sshd]
-enabled = false
+enabled  = true
+logpath  = /var/log/auth.log
+backend  = auto
+maxretry = 3
+findtime = 10m
+bantime  = 1h
