@@ -19,3 +19,4 @@ alert icmp any any -> 198.51.100.254 any (msg:"LAB ping a la bodega desde la cal
 #         conexión (flags:S) al SSH de la bodega (puerto 22 de 198.51.100.254) en 60 segundos.
 #         Pistas: alert tcp … -> 198.51.100.254 22 (…; flags:S;
 #                 threshold: type threshold, track by_src, count 10, seconds 60)   sid:1000002
+alert tcp any any -> 198.51.100.254 22 (msg:"MAS DE 10 INTENTOS POR SSH"; flags:S; threshold: type threshold, track by_src, count 10, seconds 60; sid:1000002; rev:1;)
