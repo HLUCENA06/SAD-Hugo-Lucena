@@ -63,8 +63,8 @@ qué hacen falta los dos?
 
 Nota del análisis **antes** de bastionar (D0):
 
->
+> 57
 
 Nota **después** (D4). ¿Por qué no llega a 100? ¿Significa que el servidor sigue inseguro? Comenta un aviso que siga saliendo.
 
->
+> 62. NO llega a 100 porque se basa en muchas recomendaciones genericas que pueden no tener sentido con mi trabajo. SSH-7408 (AllowTcpForwarding): Propone desactivar el reenvío de puertos TCP por SSH
